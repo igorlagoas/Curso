@@ -22,6 +22,7 @@ namespace Curso
                 for (int j = 0; j < n; j++)
                 {
                     matriz[i,j] = int.Parse(valores[j]);
+                    var = a;
                 }
             }
 
