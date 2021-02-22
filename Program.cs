@@ -6,6 +6,8 @@ namespace Curso
     {
         static void Main(string[] args)
         {
+            var vapovapo;
+            
             Console.Write("Insira o número de linhas da matriz: ");
             int m = int.Parse(Console.ReadLine());
             
@@ -22,6 +24,7 @@ namespace Curso
                 for (int j = 0; j < n; j++)
                 {
                     matriz[i,j] = int.Parse(valores[j]);
+
                 }
             }
 
