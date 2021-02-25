@@ -1,4 +1,6 @@
 ﻿using System;
+using Curso.Entities.Enums;
+using Curso.Entities;
 
 namespace Curso
 {
@@ -6,53 +8,45 @@ namespace Curso
     {
         static void Main(string[] args)
         {
-            var vapovapo;
-            
-            Console.Write("Insira o número de linhas da matriz: ");
-            int m = int.Parse(Console.ReadLine());
-            
-            Console.Write("Insira o número de colunas da matriz: ");
+            Console.WriteLine("Enter cliente data:");
+            Console.Write("Name: ");
+            string name = Console.ReadLine();
+            Console.Write("E-mail: ");
+            string email = Console.ReadLine();
+            Console.Write("Birth date (DD/MM/YYYY): ");
+            DateTime birthDate = DateTime.Parse(Console.ReadLine());
+            Console.WriteLine("Enter order data:");
+            Console.Write("Status: ");
+            OrderStatus status = Enum.Parse<OrderStatus>(Console.ReadLine());
+
+            Client client = new Client(name, email, birthDate);
+            Order order = new Order(DateTime.Now, status, client);
+
+
+            Console.Write("How many items to this order? ");
             int n = int.Parse(Console.ReadLine());
-            
-            int[,] matriz = new int[m, n];
 
-            for (int i = 0; i < m; i++)
+            for (int i = 1; i <= n; i++)
             {
-                Console.WriteLine("Digite os dados da linha " + (i+1) + ".");
-                string[] valores = Console.ReadLine().Split(" ");
+                Console.WriteLine($"Enter #{i} item data:");
+                Console.Write("Product name: ");
+                string productName = Console.ReadLine();
+                Console.Write("Product price: ");
+                double price = double.Parse(Console.ReadLine());
 
-                for (int j = 0; j < n; j++)
-                {
-                    matriz[i,j] = int.Parse(valores[j]);
+                Product product = new Product(productName, price);
 
-                }
+                Console.Write("Quantity: ");
+                int quantity = int.Parse(Console.ReadLine());
+
+                OrderItem orderItem = new OrderItem(quantity, price, product);
+
+                order.AddItem(orderItem);
             }
 
-            Console.Write("Digite o número que deseja procurar: ");
-            int number = int.Parse(Console.ReadLine());
-
-            for (int i = 0; i < m; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    if (matriz[i, j] == number) {
-                        Console.WriteLine("Position " + i + "," + j + ":");
-                        if (j > 0) {
-                            Console.WriteLine("Left: " + matriz[i, j - 1]);
-                        }
-                        if (i > 0) {
-                            Console.WriteLine("Up: " + matriz[i - 1, j]);
-                        }
-                        if (j < n - 1) {
-                            Console.WriteLine("Right: " + matriz[i, j + 1]);
-                        }
-                        if (i < m - 1) {
-                            Console.WriteLine("Down: " + matriz[i + 1, j]);
-                        }
-                    }
-                }
-            }
-
+            Console.WriteLine();
+            Console.WriteLine("ORDER SUMMARY:");
+            Console.WriteLine(order);
 
             // Apenas para o console não fechar.
             Console.ReadLine();
