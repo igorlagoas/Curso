@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Curso.Entities
 {
     public class Product
@@ -5,10 +7,15 @@ namespace Curso.Entities
         public string Name { get; set; }
         public double Price { get; set; }
 
-        public Product(string name, double price) 
+        public Product (string name, double price) 
         {
             Name = name;
             Price = price;
+        }
+
+        public virtual string PriceTag() 
+        {  
+            return Name + " $ " + Price.ToString("F2", CultureInfo.InvariantCulture);
         }
     }
 }
