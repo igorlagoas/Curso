@@ -9,49 +9,53 @@ namespace Curso
     {
         static void Main(string[] args)
         {
-            List<Product> list = new List<Product>();
+            List<Payer> list = new List<Payer>();
 
-            Console.Write("Enter the number of products: ");
+            Console.Write("Enter the number of tax payers: ");
             int n = int.Parse(Console.ReadLine());
 
             for (int i = 1; i <= n; i++)
             {
-                Console.WriteLine($"Product #{i} data:");
-                Console.Write("Common, used or imported (c/u/i)? ");
-                char productType = char.Parse(Console.ReadLine());
+                Console.WriteLine($"Tax payer #{i} data:");
+                Console.Write("Individual or Company (i/c)? ");
+                char ch = char.Parse(Console.ReadLine());
 
                 Console.Write("Name: ");
                 string name = Console.ReadLine();
 
-                Console.Write("Price: ");
-                double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                Console.Write("Anual Income: ");
+                double anualIncome = double.Parse(Console.ReadLine());
 
-                if (productType == 'c') {
-                    list.Add(new Product(name, price));
-                }
-
-                else if (productType == 'u')
+                if (ch == 'i')
                 {
-                    Console.Write("Manufacture date (DD/MM/YYYY): ");
-                    DateTime manufactureDate = DateTime.Parse(Console.ReadLine());
-                    list.Add(new UsedProduct(name, price, manufactureDate));
+                    Console.Write("Health expenditures: ");
+                    double healthExpenditures = double.Parse(Console.ReadLine());
+                    list.Add(new Individual(name, anualIncome, healthExpenditures));
                 }
 
                 else
                 {
-                    Console.Write("Customs Fee: ");
-                    double customsFee = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-                    list.Add(new ImportedProduct(name, price, customsFee));
+                    Console.Write("Number of employees: ");
+                    int employeeNumber = int.Parse(Console.ReadLine());
+                    list.Add(new Company(name, anualIncome, employeeNumber));
                 }
             }
 
             Console.WriteLine();
-            Console.WriteLine("PRICE TAGS:");
-            foreach (Product product in list)
+            Console.WriteLine("TAXES PAID");
+
+            double sum = 0;;
+            foreach (Payer payer in list)
             {
-                Console.WriteLine(product.PriceTag());
-            }  
-                
+                double tax = payer.TaxesPaid();
+                Console.WriteLine(payer.Name + ": $ " + tax.ToString("F2", CultureInfo.InvariantCulture));
+                sum += tax;
+            }
+
+            Console.WriteLine();
+            Console.Write("TOTAL TAXES: " + sum.ToString("F2", CultureInfo.InvariantCulture));
+            
+
             // Apenas para o console não fechar.
             Console.ReadLine();
         }
