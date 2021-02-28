@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Curso.Entities;
 using System.Globalization;
+using Curso.Exceptions;
 
 namespace Curso
 {
@@ -9,52 +10,36 @@ namespace Curso
     {
         static void Main(string[] args)
         {
-            List<Payer> list = new List<Payer>();
+            Console.WriteLine("Enter account data");
+            Console.Write("Number: ");
+            int number = int.Parse(Console.ReadLine());
 
-            Console.Write("Enter the number of tax payers: ");
-            int n = int.Parse(Console.ReadLine());
+            Console.Write("Holder: ");
+            string holder = Console.ReadLine();
 
-            for (int i = 1; i <= n; i++)
-            {
-                Console.WriteLine($"Tax payer #{i} data:");
-                Console.Write("Individual or Company (i/c)? ");
-                char ch = char.Parse(Console.ReadLine());
+            Console.Write("Inicial Balance: ");
+            double initialBalance = double.Parse(Console.ReadLine());
 
-                Console.Write("Name: ");
-                string name = Console.ReadLine();
+            Console.Write("Withdraw limit: ");
+            double withdrawLimit = double.Parse(Console.ReadLine());
 
-                Console.Write("Anual Income: ");
-                double anualIncome = double.Parse(Console.ReadLine());
-
-                if (ch == 'i')
-                {
-                    Console.Write("Health expenditures: ");
-                    double healthExpenditures = double.Parse(Console.ReadLine());
-                    list.Add(new Individual(name, anualIncome, healthExpenditures));
-                }
-
-                else
-                {
-                    Console.Write("Number of employees: ");
-                    int employeeNumber = int.Parse(Console.ReadLine());
-                    list.Add(new Company(name, anualIncome, employeeNumber));
-                }
-            }
-
+            Account account =  new Account(number, holder, initialBalance, withdrawLimit);
             Console.WriteLine();
-            Console.WriteLine("TAXES PAID");
 
-            double sum = 0;;
-            foreach (Payer payer in list)
-            {
-                double tax = payer.TaxesPaid();
-                Console.WriteLine(payer.Name + ": $ " + tax.ToString("F2", CultureInfo.InvariantCulture));
-                sum += tax;
-            }
-
-            Console.WriteLine();
-            Console.Write("TOTAL TAXES: " + sum.ToString("F2", CultureInfo.InvariantCulture));
+            Console.Write("Enter amount for withdraw: ");
+            double amount = double.Parse(Console.ReadLine());
             
+            try 
+            {
+                account.Withdraw(amount);
+            }
+            catch (DomainException e)
+            {
+                Console.WriteLine("Withdraw error: " + e.Message);
+            }
+
+            Console.WriteLine("New balance: " + account.Balance.ToString("F2", CultureInfo.InvariantCulture));
+
 
             // Apenas para o console não fechar.
             Console.ReadLine();
