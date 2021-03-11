@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Curso.Entities;
-using System.Globalization;
-using Curso.Exceptions;
 
 namespace Curso
 {
@@ -10,35 +7,40 @@ namespace Curso
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter account data");
-            Console.Write("Number: ");
-            int number = int.Parse(Console.ReadLine());
 
-            Console.Write("Holder: ");
-            string holder = Console.ReadLine();
+            HashSet<int> setA = new HashSet<int>();
+            HashSet<int> setB = new HashSet<int>();
+            HashSet<int> setC = new HashSet<int>();
 
-            Console.Write("Inicial Balance: ");
-            double initialBalance = double.Parse(Console.ReadLine());
+            Console.Write("How many students for course A? ");
+            int numberA = int.Parse(Console.ReadLine());
 
-            Console.Write("Withdraw limit: ");
-            double withdrawLimit = double.Parse(Console.ReadLine());
-
-            Account account =  new Account(number, holder, initialBalance, withdrawLimit);
-            Console.WriteLine();
-
-            Console.Write("Enter amount for withdraw: ");
-            double amount = double.Parse(Console.ReadLine());
-            
-            try 
+            for (int i = 0; i < numberA; i++)
             {
-                account.Withdraw(amount);
-            }
-            catch (DomainException e)
-            {
-                Console.WriteLine("Withdraw error: " + e.Message);
+                setA.Add(int.Parse(Console.ReadLine()));
             }
 
-            Console.WriteLine("New balance: " + account.Balance.ToString("F2", CultureInfo.InvariantCulture));
+            Console.Write("How many students for course B? ");
+            int numberB = int.Parse(Console.ReadLine());
+
+            for (int i = 0; i < numberB; i++)
+            {
+                setA.Add(int.Parse(Console.ReadLine()));
+            }
+
+            Console.Write("How many students for course C? ");
+            int numberC = int.Parse(Console.ReadLine());
+
+            for (int i = 0; i < numberC; i++)
+            {
+                setA.Add(int.Parse(Console.ReadLine()));
+            }
+
+            HashSet<int> result = new HashSet<int>(setA);
+            result.UnionWith(setB);
+            result.UnionWith(setC);
+
+            Console.Write("Total students: " + result.Count);
 
 
             // Apenas para o console não fechar.
