@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using Curso.Entities;
+using System.Linq;
+using System.Globalization;
+using System.Collections;
 
 namespace Curso
 {
@@ -7,41 +12,38 @@ namespace Curso
     {
         static void Main(string[] args)
         {
+            Console.Write("Digite o caminho do arquivo a ser lido: ");
+            string path = Console.ReadLine();
 
-            HashSet<int> setA = new HashSet<int>();
-            HashSet<int> setB = new HashSet<int>();
-            HashSet<int> setC = new HashSet<int>();
+            Console.Write("Digite o salário mínimo a ser exibido: ");
+            double salaryMin = double.Parse(Console.ReadLine());
 
-            Console.Write("How many students for course A? ");
-            int numberA = int.Parse(Console.ReadLine());
+            List<Employee> list = new List<Employee>();
 
-            for (int i = 0; i < numberA; i++)
+            using (StreamReader sr = File.OpenText(path))
             {
-                setA.Add(int.Parse(Console.ReadLine()));
+                while (!sr.EndOfStream)
+                {
+                    string[] fields = sr.ReadLine().Split(',');
+                    string name = fields[0];
+                    string email = fields[1];
+                    double salary = double.Parse(fields[2], CultureInfo.InvariantCulture);
+
+                    list.Add(new Employee(name, email, salary));
+                }
             }
 
-            Console.Write("How many students for course B? ");
-            int numberB = int.Parse(Console.ReadLine());
+            var r1 = list.Where(e => e.Salary > salaryMin).OrderBy(e => e.Email).Select(e => e.Email);
+            var r2 = list.Where(e => e.Name[0] == 'M').Sum(e => e.Salary);
 
-            for (int i = 0; i < numberB; i++)
+            Console.WriteLine($"Os e-mails dos funcionários com salário maior que {salaryMin} são: ");
+            foreach (IEnumerable email in r1)
             {
-                setA.Add(int.Parse(Console.ReadLine()));
+                Console.WriteLine(email);
             }
+            Console.WriteLine();
 
-            Console.Write("How many students for course C? ");
-            int numberC = int.Parse(Console.ReadLine());
-
-            for (int i = 0; i < numberC; i++)
-            {
-                setA.Add(int.Parse(Console.ReadLine()));
-            }
-
-            HashSet<int> result = new HashSet<int>(setA);
-            result.UnionWith(setB);
-            result.UnionWith(setC);
-
-            Console.Write("Total students: " + result.Count);
-
+            Console.WriteLine("A soma dos salários dos funcionários que começam com a letra 'M' é: R$ " + r2.ToString("F2", CultureInfo.InvariantCulture));
 
             // Apenas para o console não fechar.
             Console.ReadLine();
